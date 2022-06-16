@@ -9,6 +9,7 @@ import woowacourse.shoppingcart.domain.CartItem;
 import woowacourse.shoppingcart.domain.Product;
 import woowacourse.shoppingcart.dto.CartItemResponse;
 import woowacourse.shoppingcart.dto.CartResponse;
+import woowacourse.shoppingcart.exception.InvalidCartItemException;
 import woowacourse.shoppingcart.exception.InvalidProductException;
 import woowacourse.shoppingcart.exception.NotInCustomerCartItemException;
 
@@ -47,6 +48,11 @@ public class CartService {
 
     public void updateCartItemQuantity(final int quantity, final Long productId, final String customerUsername) {
         validateProductId(productId);
+
+        final CartItem cartItem = cartDao.findCartItemByProductId(productId, customerUsername)
+                .orElseThrow(InvalidCartItemException::new);
+        cartItem.updateQuantity(quantity);
+
         cartDao.updateCartItemQuantity(quantity, productId, customerUsername);
     }
 

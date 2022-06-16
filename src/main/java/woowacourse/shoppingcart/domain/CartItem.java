@@ -2,7 +2,7 @@ package woowacourse.shoppingcart.domain;
 
 public class CartItem {
     private final Product product;
-    private final int quantity;
+    private int quantity;
 
     public CartItem(Product product, int quantity) {
         this.product = product;
@@ -11,6 +11,10 @@ public class CartItem {
 
     public static CartItem of(Long id, String name, int price, String thumbnail, int quantity) {
         return new CartItem(new Product(id, name, price, thumbnail), quantity);
+    }
+
+    public void updateQuantity(int updatedQuantity) {
+        quantity = updatedQuantity;
     }
 
     public Product getProduct() {
