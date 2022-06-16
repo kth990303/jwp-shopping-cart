@@ -37,8 +37,7 @@ public class CartService {
     }
 
     public void addCart(final Long productId, final String customerUsername) {
-        final List<CartItem> cartItems = cartDao.findCartItemsByCustomerUsername(customerUsername);
-        final Cart cart = new Cart(cartItems);
+        final Cart cart = findCart(customerUsername);
         final Product product = productDao.findProductById(productId)
                 .orElseThrow(InvalidProductException::new);
         cart.add(product);
@@ -47,18 +46,17 @@ public class CartService {
     }
 
     public void updateCartItemQuantity(final int quantity, final Long productId, final String customerUsername) {
-        validateProductId(productId);
-
+        final Cart cart = findCart(customerUsername);
         final CartItem cartItem = cartDao.findCartItemByProductId(productId, customerUsername)
                 .orElseThrow(InvalidCartItemException::new);
-        cartItem.updateQuantity(quantity);
+        cart.updateCartItem(cartItem, quantity);
 
         cartDao.updateCartItemQuantity(quantity, productId, customerUsername);
     }
 
-    private void validateProductId(final Long productId) {
-        productDao.findProductById(productId)
-                .orElseThrow(() -> new InvalidProductException("존재하지 않는 상품입니다."));
+    private Cart findCart(String customerUsername) {
+        final List<CartItem> cartItems = cartDao.findCartItemsByCustomerUsername(customerUsername);
+        return new Cart(cartItems);
     }
 
     public void deleteCart(final String customerUsername) {
@@ -67,6 +65,14 @@ public class CartService {
 
     public void deleteCartItem(final String customerUsername, final List<Long> productIds) {
         validateCustomerCart(customerUsername, productIds);
+
+        final Cart cart = findCart(customerUsername);
+        for (Long productId : productIds) {
+            final CartItem cartItem = cartDao.findCartItemByProductId(productId, customerUsername)
+                    .orElseThrow(InvalidCartItemException::new);
+            cart.delete(cartItem);
+        }
+
         cartDao.deleteCartItem(productIds, customerUsername);
     }
 

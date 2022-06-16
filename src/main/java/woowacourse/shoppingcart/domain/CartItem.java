@@ -13,8 +13,9 @@ public class CartItem {
         return new CartItem(new Product(id, name, price, thumbnail), quantity);
     }
 
-    public void updateQuantity(int updatedQuantity) {
+    public CartItem updateQuantity(int updatedQuantity) {
         quantity = updatedQuantity;
+        return this;
     }
 
     public Product getProduct() {

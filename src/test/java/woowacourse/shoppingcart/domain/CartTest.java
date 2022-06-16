@@ -38,4 +38,25 @@ class CartTest {
                 .isThrownBy(() -> cart.add(cartItem))
                 .withMessageContaining("이미");
     }
+
+    @DisplayName("카트 상품 수량을 변경한다.")
+    @Test
+    void update() {
+        cart.add(cartItem);
+
+        cart.updateCartItem(cartItem, 2);
+
+        CartItem actual = cart.getCartItems().get(0);
+        assertThat(actual.getQuantity()).isEqualTo(2);
+    }
+
+    @DisplayName("카트의 상품 일부를 제거한다.")
+    @Test
+    void delete() {
+        cart.add(cartItem);
+
+        cart.delete(cartItem);
+
+        assertThat(cart.getCartItems().size()).isEqualTo(0);
+    }
 }

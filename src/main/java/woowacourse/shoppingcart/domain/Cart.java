@@ -25,6 +25,15 @@ public class Cart {
         add(cartItem);
     }
 
+    public void updateCartItem(CartItem cartItem, int updateQuantity) {
+        cartItems.remove(cartItem);
+        cartItems.add(cartItem.updateQuantity(updateQuantity));
+    }
+
+    public void delete(CartItem cartItem) {
+        cartItems.remove(cartItem);
+    }
+
     private void validateDuplicateProduct(Product product) {
         final boolean isDuplicateProduct = cartItems.stream()
                 .anyMatch(it -> it.getProduct().equals(product));

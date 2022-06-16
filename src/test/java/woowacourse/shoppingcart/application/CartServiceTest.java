@@ -9,7 +9,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 import woowacourse.shoppingcart.dto.*;
 import woowacourse.shoppingcart.exception.ExistCartItemException;
-import woowacourse.shoppingcart.exception.InvalidProductException;
+import woowacourse.shoppingcart.exception.InvalidCartItemException;
 
 import java.util.List;
 
@@ -89,10 +89,10 @@ class CartServiceTest {
     @DisplayName("장바구니에 존재하지 않는 상품의 수량을 변경할 경우 예외를 발생시킨다.")
     @Test
     void updateCartItemQuantity_invalidProduct() {
-        assertThatExceptionOfType(InvalidProductException.class)
+        assertThatExceptionOfType(InvalidCartItemException.class)
                 .isThrownBy(() -> cartService.updateCartItemQuantity(3,
                         productResponse2.getId() + 100L, "kth990303"))
-                .withMessageContaining("존재");
+                .withMessageContaining("장바구니");
     }
 
     @DisplayName("장바구니를 비운다.")
