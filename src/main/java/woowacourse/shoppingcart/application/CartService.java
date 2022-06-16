@@ -36,8 +36,6 @@ public class CartService {
     }
 
     public void addCart(final Long productId, final String customerUsername) {
-        validateProductId(productId);
-
         final List<CartItem> cartItems = cartDao.findCartItemsByCustomerUsername(customerUsername);
         final Cart cart = new Cart(cartItems);
         final Product product = productDao.findProductById(productId)
